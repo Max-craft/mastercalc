@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة استهلاك الشبكة</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: block;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        h3 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        p {
+            text-align: center;
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* تنسيق للأزرار أو الحواف */
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>حاسبة استهلاك الشبكة</h2>
+
+        <label for="quota">الكوتا الشهرية (جيجابايت):</label>
+        <input type="number" id="quota" value="140" onchange="calculate()"><br>
+
+        <label for="speed">سرعة الجهاز (ميجابايت/ثانية):</label>
+        <input type="number" id="speed" value="1.25" onchange="calculate()"><br>
+
+        <label for="devices">عدد الأجهزة:</label>
+        <input type="number" id="devices" value="1" onchange="calculate()"><br>
+
+        <h3>النتائج:</h3>
+        <p id="totalTime">إجمالي الوقت اليومي (جميع الأجهزة): </p>
+        <p id="timePerDevice">الوقت اليومي لكل جهاز: </p>
+    </div>
+
+    <script>
+        function calculate() {
+            var quota = document.getElementById("quota").value; // الكوتا الشهرية بالجيجابايت
+            var speed = document.getElementById("speed").value; // سرعة الجهاز بالميجابايت/ثانية
+            var devices = document.getElementById("devices").value; // عدد الأجهزة
+
+            // تقسيم الوقت الإجمالي على عدد الأيام في الشهر
+            var dailyTime = (quota / speed) * 0.075;  // الوقت اليومي لجميع الأجهزة
+
+            // تقسيم الوقت اليومي على عدد الأجهزة
+            var dailyTimePerDevice = dailyTime / devices; // الوقت اليومي لكل جهاز
+
+            // تحديث النتائج في الصفحة
+            document.getElementById("totalTime").innerHTML = "إجمالي الوقت اليومي (جميع الأجهزة): " + dailyTime.toFixed(2) + " ساعات";
+            document.getElementById("timePerDevice").innerHTML = "الوقت اليومي لكل جهاز: " + dailyTimePerDevice.toFixed(2) + " ساعات";
+        }
+
+        // حساب القيم الأولية عند تحميل الصفحة
+        window.onload = calculate;
+    </script>
+</body>
+</html>
