@@ -97,34 +97,32 @@
     <button id="installButton" style="display: none;">تثبيت التطبيق</button>
 
     <script>
-      let deferredPrompt;
-      const installButton = document.getElementById('installButton');
-    
-      window.addEventListener('beforeinstallprompt', (event) => {
-        // منع ظهور واجهة التثبيت الافتراضية
-        event.preventDefault();
-        deferredPrompt = event;
-    
-        // إظهار زر التثبيت للمستخدم
-        installButton.style.display = 'block';
-    
-        // عند الضغط على زر التثبيت، سيتم تفعيل الـ install
-        installButton.addEventListener('click', () => {
-          // إظهار نافذة التثبيت
-          deferredPrompt.prompt();
-    
-          // الانتظار لإجابة المستخدم
-          deferredPrompt.userChoice.then((choiceResult) => {
+     let deferredPrompt;
+const installButton = document.getElementById('installButton');
+
+// إظهار زر التثبيت عند وجود فرصة
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installButton.style.display = 'block'; // إظهار الزر
+});
+
+// عند الضغط على زر التثبيت
+installButton.addEventListener('click', () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
             if (choiceResult.outcome === 'accepted') {
-              console.log('تم تثبيت التطبيق');
+                console.log('User accepted the A2HS prompt');
             } else {
-              console.log('لم يتم تثبيت التطبيق');
+                console.log('User dismissed the A2HS prompt');
             }
             deferredPrompt = null;
-            installButton.style.display = 'none';  // إخفاء زر التثبيت بعد التفاعل
-          });
         });
-      });
+    }
+});
+
+
     </script>
     
     <script>
