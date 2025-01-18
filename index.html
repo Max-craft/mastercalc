@@ -94,9 +94,41 @@
         <p id="totalTime">إجمالي الوقت اليومي (جميع الأجهزة): </p>
         <p id="timePerDevice">الوقت اليومي لكل جهاز: </p>
     </div>
+    <button id="installButton" style="display: none;">تثبيت التطبيق</button>
 
     <script>
-        
+      let deferredPrompt;
+      const installButton = document.getElementById('installButton');
+    
+      window.addEventListener('beforeinstallprompt', (event) => {
+        // منع ظهور واجهة التثبيت الافتراضية
+        event.preventDefault();
+        deferredPrompt = event;
+    
+        // إظهار زر التثبيت للمستخدم
+        installButton.style.display = 'block';
+    
+        // عند الضغط على زر التثبيت، سيتم تفعيل الـ install
+        installButton.addEventListener('click', () => {
+          // إظهار نافذة التثبيت
+          deferredPrompt.prompt();
+    
+          // الانتظار لإجابة المستخدم
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('تم تثبيت التطبيق');
+            } else {
+              console.log('لم يتم تثبيت التطبيق');
+            }
+            deferredPrompt = null;
+            installButton.style.display = 'none';  // إخفاء زر التثبيت بعد التفاعل
+          });
+        });
+      });
+    </script>
+    
+    <script>
+
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/mastercalc/service-worker.js')  // المسار الصحيح إلى الملف
                 .then((registration) => {
