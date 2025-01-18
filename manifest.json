@@ -1,0 +1,9 @@
+{
+    "name": "حاسبة استهلاك الشبكة",
+    "short_name": "حاسبة الشبكة",
+    "description": "تطبيق لحساب استهلاك الشبكة بناءً على الكوتا والسرعة وعدد الأجهزة.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4CAF50"
+}

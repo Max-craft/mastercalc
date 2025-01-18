@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حاسبة استهلاك الشبكة</title>
+    <link rel="manifest" href="manifest.json"> <!-- ربط manifest -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -95,6 +96,17 @@
     </div>
 
     <script>
+        // تسجيل Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                    console.log('Service Worker مسجل بنجاح:', registration);
+                })
+                .catch((error) => {
+                    console.log('خطأ في تسجيل Service Worker:', error);
+                });
+        }
+
         function calculate() {
             var quota = document.getElementById("quota").value; // الكوتا الشهرية بالجيجابايت
             var speed = document.getElementById("speed").value; // سرعة الجهاز بالميجابايت/ثانية
