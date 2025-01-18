@@ -2,10 +2,7 @@ const CACHE_NAME = 'network-consumption-calculator-cache-v1';
 const urlsToCache = [
   '/',            // الصفحة الرئيسية
   '/index.html',   // صفحة الـ HTML
-  '/styles.css',   // ملف الـ CSS
-  '/script.js',    // ملف الـ JavaScript
   '/manifest.json' // ملف الـ Manifest
-  // تم إزالة '/icon.png' من هنا لتجنب تخزين الأيقونة
 ];
 
 // تثبيت Service Worker
@@ -13,7 +10,25 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        return cache.addAll(urlsToCache);  // تخزين الملفات بدون الأيقونة
+        return Promise.all(urlsToCache.map(url => {
+          return fetch(url)
+            .then(response => {
+              if (response.ok) {
+                return cache.put(url, response);
+              } else {
+                console.log('فشل في تحميل الملف:', url);
+              }
+            })
+            .catch(error => {
+              console.error('خطأ أثناء تحميل الملف:', url, error);
+            });
+        }));
+      })
+      .then(() => {
+        console.log('تم تخزين جميع الملفات بنجاح');
+      })
+      .catch((error) => {
+        console.error('حدث خطأ أثناء تخزين الملفات:', error);
       })
   );
 });
@@ -42,16 +57,4 @@ self.addEventListener('fetch', (event) => {
         return response || fetch(event.request);  // إذا لم يكن موجودًا في الكاش، يتم تحميله من السيرفر
       })
   );
-});
-
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                return cache.addAll(urlsToCache)
-                    .catch((error) => {
-                        console.error('Error adding files to cache: ', error);
-                    });
-            })
-    );
 });
