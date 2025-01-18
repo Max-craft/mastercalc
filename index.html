@@ -96,9 +96,9 @@
     </div>
 
     <script>
-        // تسجيل Service Worker
+        
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
+            navigator.serviceWorker.register('/mastercalc/service-worker.js')  // المسار الصحيح إلى الملف
                 .then((registration) => {
                     console.log('Service Worker مسجل بنجاح:', registration);
                 })
@@ -106,6 +106,7 @@
                     console.log('خطأ في تسجيل Service Worker:', error);
                 });
         }
+
 
         function calculate() {
             var quota = document.getElementById("quota").value; // الكوتا الشهرية بالجيجابايت
